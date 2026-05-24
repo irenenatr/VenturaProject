@@ -53,7 +53,3 @@ All application assets are stored inside:
 ```bash
 assets/
 ```
-
-## Authors
-
-Frontend Team - Ventura Project
