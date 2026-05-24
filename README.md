@@ -1,16 +1,59 @@
-# p_ventura
+# Ventura Frontend
 
-A new Flutter project.
+Frontend mobile application for Ventura, an integrated travel planning platform with budget optimization and adaptive itinerary features.
+
+## Features
+
+- User authentication
+- Budget trip planner
+- Adaptive itinerary
+- Destination recommendations
+- Responsive mobile UI
+- Travel expense tracking
+
+## Tech Stack
+
+- Flutter
+- Dart
+
+## Project Structure
+
+```bash
+lib/
+ ├ screens/
+ ├ widgets/
+ ├ utils/
+ └ main.dart
+```
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+### Clone repository
 
-A few resources to get you started if this is your first Flutter project:
+```bash
+git clone https://github.com/irenenatr/VenturaProject.git
+```
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Install dependencies
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```bash
+flutter pub get
+```
+
+### Run project
+
+```bash
+flutter run
+```
+
+## Assets
+
+All application assets are stored inside:
+
+```bash
+assets/
+```
+
+## Authors
+
+Frontend Team - Ventura Project
