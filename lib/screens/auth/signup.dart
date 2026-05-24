@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:p_ventura/screens/home.dart';
 import '../../utils/colors.dart';
 import '../../widgets/auth_layouts.dart';
 import 'login.dart';
@@ -150,10 +151,14 @@ class SignupScreen extends StatelessWidget {
 
               // --- FOOTER ---
               GestureDetector(
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const LoginScreen()),
-                ),
+                onTap: () {
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => const HomeScreen()),
+                    (route) =>
+                        false, // Menghapus history agar tidak bisa back ke login
+                  );
+                },
                 child: RichText(
                   text: const TextSpan(
                     style: TextStyle(
