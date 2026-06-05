@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:p_ventura/screens/home.dart';
 import '../../utils/colors.dart';
-import '../../widgets/auth_layouts.dart';
+import '../../widgets/auth_layouts.dart'; // Import layout yang baru dibuat
 import 'login.dart';
 
 class SignupScreen extends StatelessWidget {
@@ -9,8 +8,8 @@ class SignupScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Perhitungan agar lingkaran putih pas memotong garis oval
-    double topPadding = MediaQuery.of(context).size.height * 0.25 - 80;
+    // Rumus agar logo pas di tengah garis lengkung
+    double topPadding = MediaQuery.of(context).size.height * 0.28 - 85;
 
     return SignupLayout(
       child: SingleChildScrollView(
@@ -20,166 +19,54 @@ class SignupScreen extends StatelessWidget {
             children: [
               SizedBox(height: topPadding > 0 ? topPadding : 20),
 
-              // --- AVATAR SECTION (Lingkaran Putih & Logo DIKECILKAN) ---
-              Stack(
-                alignment: Alignment.center,
-                children: [
-                  Container(
-                    height:
-                        155, // Ukuran lingkaran putih dikecilkan (sebelumnya 190)
-                    width: 155,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black12,
-                          blurRadius: 15,
-                          offset: Offset(0, 8),
-                        ),
-                      ],
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(
-                        18,
-                      ), // Padding ditambah agar logo di dalam mengecil
-                      child: Image.asset(
-                        'assets/images/logo.png',
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 5,
-                    right: 5,
-                    child: Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: const BoxDecoration(
-                        color: Color(0xFF444444),
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(
-                        Icons.camera_alt,
-                        color: Colors.white,
-                        size: 18,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
+              // --- AVATAR / FOTO PROFIL ---
+              _buildAvatarSection(),
+
+              const SizedBox(height: 10),
               const Text(
                 'Take a Photo',
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w900,
-                  fontSize: 13,
-                  color: Colors.black,
+                  fontSize: 14,
                 ),
               ),
 
-              const SizedBox(height: 35), // Spasi konten yang lebih lega
-              // --- INPUT FIELDS ---
-              _buildInput('Name'),
+              const SizedBox(height: 40),
+
+              // --- FORM INPUT ---
+              _buildInputField('Name'),
               const SizedBox(height: 15),
-              _buildInput('Email'),
+              _buildInputField('Email'),
               const SizedBox(height: 15),
-              _buildInput('Password', isPass: true),
+              _buildInputField('Password', isPassword: true),
 
               const SizedBox(height: 15),
 
               // --- CHECKBOX ---
-              Row(
-                children: [
-                  Container(
-                    height: 18,
-                    width: 18,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(color: AppColors.deepOcean, width: 2),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  const Text(
-                    'Agree with Terms & Condition',
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 11,
-                      fontWeight: FontWeight.w900,
-                      decoration: TextDecoration.underline,
-                    ),
-                  ),
-                ],
-              ),
+              _buildTermsCheckbox(),
 
               const SizedBox(height: 35),
 
               // --- TOMBOL SIGN UP ---
-              _buildActionBtn('Sign Up'),
+              _buildSignupButton(),
 
               const SizedBox(height: 30),
 
-              // --- DIVIDER ---
-              Row(
-                children: [
-                  const Expanded(
-                    child: Divider(color: AppColors.deepOcean, thickness: 1.2),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Text(
-                      'Or continue with',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        color: Colors.grey.shade600,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ),
-                  const Expanded(
-                    child: Divider(color: AppColors.deepOcean, thickness: 1.2),
-                  ),
-                ],
-              ),
+              // --- DIVIDER SOCIAL ---
+              _buildSocialDivider(),
 
               const SizedBox(height: 25),
-              _socialIcons(),
+
+              // --- TOMBOL SOSIAL ---
+              _buildSocialIcons(),
 
               const SizedBox(height: 30),
 
-              // --- FOOTER ---
-              GestureDetector(
-                onTap: () {
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => const HomeScreen()),
-                    (route) =>
-                        false, // Menghapus history agar tidak bisa back ke login
-                  );
-                },
-                child: RichText(
-                  text: const TextSpan(
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      color: Colors.black,
-                      fontSize: 13,
-                    ),
-                    children: [
-                      TextSpan(text: "Already have an account? "),
-                      TextSpan(
-                        text: "Log in",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w900,
-                          color: AppColors.deepOcean,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 30),
+              // --- FOOTER NAVIGASI ---
+              _buildFooter(context),
+
+              const SizedBox(height: 40),
             ],
           ),
         ),
@@ -187,15 +74,55 @@ class SignupScreen extends StatelessWidget {
     );
   }
 
-  // --- HELPERS ---
-  Widget _buildInput(String hint, {bool isPass = false}) {
+  // --- WIDGET HELPERS (DIPISAH AGAR RAPI) ---
+
+  Widget _buildAvatarSection() {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        Container(
+          height: 170,
+          width: 170,
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 15,
+                offset: Offset(0, 8),
+              ),
+            ],
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(25),
+            child: Image.asset('assets/images/logo.png'),
+          ),
+        ),
+        Positioned(
+          bottom: 8,
+          right: 8,
+          child: Container(
+            padding: const EdgeInsets.all(8),
+            decoration: const BoxDecoration(
+              color: Color(0xFF444444),
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(Icons.camera_alt, color: Colors.white, size: 18),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildInputField(String hint, {bool isPassword = false}) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.bluebird,
+        color: const Color(0xFF7CB6D1),
         borderRadius: BorderRadius.circular(20),
       ),
       child: TextField(
-        obscureText: isPass,
+        obscureText: isPassword,
         style: const TextStyle(
           color: Colors.white,
           fontWeight: FontWeight.bold,
@@ -203,9 +130,8 @@ class SignupScreen extends StatelessWidget {
         decoration: InputDecoration(
           hintText: hint,
           hintStyle: const TextStyle(
-            color: Colors.white70,
+            color: Colors.white,
             fontFamily: 'Poppins',
-            fontWeight: FontWeight.w500,
           ),
           border: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(
@@ -217,7 +143,33 @@ class SignupScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildActionBtn(String label) {
+  Widget _buildTermsCheckbox() {
+    return Row(
+      children: [
+        Container(
+          height: 18,
+          width: 18,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(color: AppColors.deepOcean, width: 2),
+            borderRadius: BorderRadius.circular(4),
+          ),
+        ),
+        const SizedBox(width: 10),
+        const Text(
+          'Agree with Terms & Condition',
+          style: TextStyle(
+            fontFamily: 'Poppins',
+            fontSize: 11,
+            fontWeight: FontWeight.w900,
+            decoration: TextDecoration.underline,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSignupButton() {
     return Container(
       width: double.infinity,
       height: 60,
@@ -226,16 +178,16 @@ class SignupScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(35),
         boxShadow: [
           BoxShadow(
-            color: Colors.black12,
+            color: Colors.black.withOpacity(0.1),
             blurRadius: 15,
             offset: const Offset(0, 8),
           ),
         ],
       ),
-      child: Center(
+      child: const Center(
         child: Text(
-          label,
-          style: const TextStyle(
+          'Sign Up',
+          style: TextStyle(
             fontFamily: 'Chango',
             fontSize: 24,
             color: AppColors.deepOcean,
@@ -245,14 +197,39 @@ class SignupScreen extends StatelessWidget {
     );
   }
 
-  Widget _socialIcons() {
+  Widget _buildSocialDivider() {
+    return Row(
+      children: [
+        const Expanded(
+          child: Divider(color: AppColors.deepOcean, thickness: 1.2),
+        ),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          child: Text(
+            'Or continue with',
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              color: Colors.grey,
+              fontWeight: FontWeight.bold,
+              fontSize: 12,
+            ),
+          ),
+        ),
+        const Expanded(
+          child: Divider(color: AppColors.deepOcean, thickness: 1.2),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSocialIcons() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: ['google.png', 'apple.png', 'phone.png']
           .map(
             (img) => Container(
-              margin: const EdgeInsets.symmetric(horizontal: 12),
-              padding: const EdgeInsets.all(14),
+              margin: const EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.all(15),
               decoration: const BoxDecoration(
                 color: Colors.white,
                 shape: BoxShape.circle,
@@ -262,6 +239,34 @@ class SignupScreen extends StatelessWidget {
             ),
           )
           .toList(),
+    );
+  }
+
+  Widget _buildFooter(BuildContext context) {
+    return GestureDetector(
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
+      ),
+      child: RichText(
+        text: const TextSpan(
+          style: TextStyle(
+            fontFamily: 'Poppins',
+            color: Colors.black,
+            fontSize: 13,
+          ),
+          children: [
+            TextSpan(text: "Already have an account? "),
+            TextSpan(
+              text: "Log in",
+              style: TextStyle(
+                fontWeight: FontWeight.w900,
+                color: AppColors.deepOcean,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

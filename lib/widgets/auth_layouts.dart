@@ -37,30 +37,33 @@ class LandingLayout extends StatelessWidget {
 //SIGNUP
 class SignupLayout extends StatelessWidget {
   final Widget child;
+
   const SignupLayout({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.clouds, // Dasar Krem #FCFAEB
+      // Warna dasar bawah (Krem #FCFAEB)
+      backgroundColor: AppColors.clouds,
       body: Stack(
         children: [
-          // LENGKUNGAN BIRU DI ATAS (Dibuat lebih OVAL)
+          // LENGKUNGAN BIRU DI ATAS (#ABE1E1)
           Container(
             height:
-                MediaQuery.of(context).size.height * 0.25, // Tinggi area biru
+                MediaQuery.of(context).size.height * 0.28, // Tinggi area biru
             width: double.infinity,
             decoration: BoxDecoration(
-              color: AppColors.brandBlue, // Biru #ABE1E1
+              color: AppColors.brandBlue,
               borderRadius: BorderRadius.vertical(
                 bottom: Radius.elliptical(
                   MediaQuery.of(context).size.width *
-                      1.0, // Dibuat 1.0 agar lebih oval/bulat
+                      1.5, // Lebar elips agar landai
                   140, // Kedalaman lengkungan
                 ),
               ),
             ),
           ),
+          // Area Konten
           SafeArea(child: child),
         ],
       ),
