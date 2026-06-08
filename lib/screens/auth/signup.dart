@@ -11,52 +11,114 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
-  bool _isAgreed = false; // State untuk checkbox
+  // State untuk menangani checklist
+  bool _isAgreed = false;
 
   @override
   Widget build(BuildContext context) {
+    // Perhitungan agar logo pas di tengah garis lengkung
+    // (Tinggi area biru 28% dari layar - setengah tinggi avatar)
+    double topPadding = (MediaQuery.of(context).size.height * 0.28) - 85;
+
     return Scaffold(
-      backgroundColor: AppColors.clouds, // Dasar bawah Krem
+      backgroundColor: AppColors.clouds, // Dasar bawah Krem #FCFAEB
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // --- HEADER: BIRU DENGAN LENGKUNGAN BAWAH ---
+            // --- HEADER: LENGKUNGAN BIRU DI ATAS ---
             Stack(
               alignment: Alignment.center,
               clipBehavior: Clip.none,
               children: [
                 Container(
-                  height: MediaQuery.of(context).size.height * 0.25,
+                  height: MediaQuery.of(context).size.height * 0.28,
                   width: double.infinity,
                   decoration: const BoxDecoration(
-                    color: AppColors.brandBlue,
+                    color: AppColors.brandBlue, // Biru #ABE1E1
                     borderRadius: BorderRadius.vertical(
-                      bottom: Radius.elliptical(200, 60),
+                      bottom: Radius.elliptical(250, 140), // Bentuk Oval
                     ),
                   ),
                 ),
-                // Avatar duduk di tengah garis
+                // --- AVATAR / FOTO PROFIL ---
                 Positioned(
-                  top: MediaQuery.of(context).size.height * 0.25 - 85,
-                  child: _buildAvatar(),
+                  top: topPadding > 0 ? topPadding : 20,
+                  child: Column(
+                    children: [
+                      Stack(
+                        alignment: Alignment.bottomRight,
+                        children: [
+                          Container(
+                            height: 170,
+                            width: 170,
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black12,
+                                  blurRadius: 15,
+                                  offset: Offset(0, 8),
+                                ),
+                              ],
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(25),
+                              child: Image.asset(
+                                'assets/images/logo.png', // Ganti dengan asset maskotmu
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                          ),
+                          // Icon Kamera Edit
+                          Container(
+                            margin: const EdgeInsets.all(5),
+                            padding: const EdgeInsets.all(8),
+                            decoration: const BoxDecoration(
+                              color: Color(0xFF444444),
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.camera_alt,
+                              color: Colors.white,
+                              size: 18,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      const Text(
+                        'Take a Photo',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w900,
+                          fontSize: 13,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
 
-            // --- KONTEN FORM ---
+            // --- FORM INPUT & TOMBOL ---
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 35),
               child: Column(
                 children: [
-                  const SizedBox(height: 120),
+                  const SizedBox(
+                    height: 130,
+                  ), // Ruang agar tidak menabrak Avatar
+
                   _buildInput('Name'),
                   const SizedBox(height: 15),
                   _buildInput('Email'),
                   const SizedBox(height: 15),
                   _buildInput('Password', isPass: true),
-                  const SizedBox(height: 20),
 
-                  // Checkbox Fungsional
+                  const SizedBox(height: 15),
+
+                  // --- CHECKBOX TERMS ---
                   GestureDetector(
                     onTap: () => setState(() => _isAgreed = !_isAgreed),
                     child: Row(
@@ -72,7 +134,7 @@ class _SignupScreenState extends State<SignupScreen> {
                               color: AppColors.deepOcean,
                               width: 2,
                             ),
-                            borderRadius: BorderRadius.circular(5),
+                            borderRadius: BorderRadius.circular(4),
                           ),
                           child: _isAgreed
                               ? const Icon(
@@ -99,27 +161,39 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
 
                   const SizedBox(height: 35),
-                  _buildBtn(context, 'Sign Up'),
+
+                  // --- TOMBOL SIGN UP ---
+                  _buildSignupBtn(context),
+
                   const SizedBox(height: 25),
-                  _buildDivider(),
-                  const SizedBox(height: 20),
-                  _socialRow(),
-                  const SizedBox(height: 25),
+
+                  // --- FOOTER NAVIGASI ---
                   GestureDetector(
                     onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(builder: (c) => const LoginScreen()),
                     ),
-                    child: const Text(
-                      "Already have an account? Log in",
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w900,
-                        color: AppColors.deepOcean,
+                    child: RichText(
+                      text: const TextSpan(
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          color: Colors.black,
+                          fontSize: 12,
+                        ),
+                        children: [
+                          TextSpan(text: "Already have an account? "),
+                          TextSpan(
+                            text: "Log in",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w900,
+                              color: AppColors.deepOcean,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 40),
                 ],
               ),
             ),
@@ -129,65 +203,19 @@ class _SignupScreenState extends State<SignupScreen> {
     );
   }
 
-  Widget _buildAvatar() {
-    return Column(
-      children: [
-        Container(
-          height: 170,
-          width: 170,
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            shape: BoxShape.circle,
-            boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 15)],
-          ),
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(25),
-                child: Image.asset(
-                  'assets/images/logo.png',
-                  fit: BoxFit.contain,
-                ),
-              ),
-              Positioned(
-                bottom: 8,
-                right: 8,
-                child: Container(
-                  padding: const EdgeInsets.all(6),
-                  decoration: const BoxDecoration(
-                    color: Color(0xFF444444),
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(
-                    Icons.camera_alt,
-                    color: Colors.white,
-                    size: 18,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 8),
-        const Text(
-          'Take a Photo',
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontWeight: FontWeight.w900,
-            fontSize: 13,
-          ),
-        ),
-      ],
-    );
-  }
-
-  // Widget _buildInput, _buildBtn, _buildDivider, _socialRow sama dengan Login agar konsisten
+  // Widget Helper untuk Input Field berwarna Biru Teal
   Widget _buildInput(String hint, {bool isPass = false}) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.bluebird,
+        color: const Color(0xFF7CB6D1), // Biru Teal sesuai gambar
         borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child: TextField(
         obscureText: isPass,
@@ -197,23 +225,39 @@ class _SignupScreenState extends State<SignupScreen> {
         ),
         decoration: InputDecoration(
           hintText: hint,
-          hintStyle: const TextStyle(color: Colors.white70),
+          hintStyle: const TextStyle(
+            color: Colors.white70,
+            fontFamily: 'Poppins',
+          ),
           border: InputBorder.none,
-          contentPadding: const EdgeInsets.all(18),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 25,
+            vertical: 18,
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildBtn(BuildContext context, String label) {
+  // Widget Helper untuk Tombol Sign Up Putih
+  Widget _buildSignupBtn(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if (_isAgreed)
+        if (_isAgreed) {
+          // Pindah ke halaman utama
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (c) => const MainNavigation()),
-            (r) => false,
+            (route) => false,
           );
+        } else {
+          // Alert jika belum centang
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("Please agree to the Terms & Conditions"),
+            ),
+          );
+        }
       },
       child: Container(
         width: double.infinity,
@@ -223,66 +267,23 @@ class _SignupScreenState extends State<SignupScreen> {
           borderRadius: BorderRadius.circular(35),
           boxShadow: [
             BoxShadow(
-              color: Colors.black12,
+              color: Colors.black.withOpacity(0.1),
               blurRadius: 15,
               offset: const Offset(0, 8),
             ),
           ],
         ),
-        child: Center(
+        child: const Center(
           child: Text(
-            label,
-            style: const TextStyle(
-              fontFamily: 'Chango',
-              fontSize: 24,
+            'Sign Up',
+            style: TextStyle(
+              fontFamily: 'Chango', // Pakai font tebal sesuai gambar
+              fontSize: 26,
               color: AppColors.deepOcean,
             ),
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildDivider() {
-    return Row(
-      children: [
-        const Expanded(
-          child: Divider(color: AppColors.deepOcean, thickness: 1),
-        ),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10),
-          child: Text(
-            "Or continue with",
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-              color: Colors.grey,
-            ),
-          ),
-        ),
-        const Expanded(
-          child: Divider(color: AppColors.deepOcean, thickness: 1),
-        ),
-      ],
-    );
-  }
-
-  Widget _socialRow() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: ['google.png', 'apple.png', 'phone.png']
-          .map(
-            (img) => Container(
-              margin: const EdgeInsets.symmetric(horizontal: 12),
-              padding: const EdgeInsets.all(12),
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-              ),
-              child: Image.asset('assets/images/$img', width: 28),
-            ),
-          )
-          .toList(),
     );
   }
 }

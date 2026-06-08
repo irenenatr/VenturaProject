@@ -1,168 +1,156 @@
 import 'package:flutter/material.dart';
 import '../../utils/colors.dart';
-import '../main_navigation.dart';
-import 'signup.dart';
+import 'signup.dart'; // Import halaman Register
+import 'login.dart'; // Import halaman Login
 
 class LandingScreen extends StatelessWidget {
   const LandingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // Mengambil ukuran layar untuk kalkulasi posisi
+    final double screenHeight = MediaQuery.of(context).size.height;
+
+    // Tinggi area biru atas (Header)
+    final double headerHeight = screenHeight * 0.35;
+    // Setengah dari tinggi logo agar duduk di puncak (asumsi logo h=270, jadi 135)
+    final double logoOffset = 135;
+
     return Scaffold(
-      // Warna dasar bawah (Krem #FCFAEB)
+      // Warna dasar bawah adalah krem sesuai gambar
       backgroundColor: AppColors.clouds,
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // --- HEADER: AREA BIRU DENGAN OVAL & LOGO ---
+            // --- BAGIAN HEADER: BIRU DENGAN OVAL & LOGO ---
             Stack(
               alignment: Alignment.center,
               clipBehavior: Clip.none,
               children: [
-                // 1. Container Biru (#ABE1E1) dengan lengkungan bawah
+                // 1. Container Biru Atas
                 Container(
-                  height: MediaQuery.of(context).size.height * 0.28,
+                  height: headerHeight,
                   width: double.infinity,
                   decoration: const BoxDecoration(
                     color: AppColors.brandBlue,
                     borderRadius: BorderRadius.vertical(
-                      bottom: Radius.elliptical(250, 80), // Lengkungan landai
+                      bottom: Radius.elliptical(250, 100), // Lengkungan landai
                     ),
                   ),
                 ),
-                // 2. Logo Maskot (Ukuran 320, duduk tepat di tengah garis puncak)
+                // 2. Logo Maskot (Duduk tepat di tengah garis puncak)
                 Positioned(
-                  top:
-                      MediaQuery.of(context).size.height * 0.28 -
-                      160, // Setengah dari tinggi logo (320/2)
+                  top: headerHeight - logoOffset,
                   child: Image.asset(
-                    'assets/images/logo.png',
-                    height: 320,
+                    'assets/images/logo.png', // Sesuaikan nama asset maskotmu
+                    height: 270,
                     fit: BoxFit.contain,
                   ),
                 ),
               ],
             ),
 
-            // --- KONTEN BAWAH ---
+            // --- BAGIAN KONTEN BAWAH ---
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 35),
               child: Column(
                 children: [
                   const SizedBox(
-                    height: 180,
+                    height: 150,
                   ), // Spasi agar teks tidak menabrak logo
-                  // Teks Judul
+                  // Teks Ventura
                   const Text(
                     'ventura',
                     style: TextStyle(
                       fontFamily: 'Chango',
                       fontSize: 54,
                       color: AppColors.deepOcean,
-                      letterSpacing: -2.0,
+                      letterSpacing: -1.5,
                       height: 1.0,
                     ),
                   ),
 
-                  const SizedBox(height: 60),
+                  // Gunakan SizedBox besar untuk mendorong tombol ke bawah seperti di gambar
+                  SizedBox(height: screenHeight * 0.2),
 
-                  // Tombol-tombol Sosial
-                  _buildSocialBtn(
-                    context,
-                    'Continue with Google',
-                    'google.png',
-                  ),
-                  const SizedBox(height: 14),
-                  _buildSocialBtn(context, 'Continue with Apple', 'apple.png'),
-                  const SizedBox(height: 14),
-                  _buildSocialBtn(context, 'Continue with Phone', 'phone.png'),
-
-                  const SizedBox(height: 50),
-
-                  // Footer: Link Sign Up
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                        "Didn't have an account? ",
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 12,
-                          color: Colors.black54,
+                  // TOMBOL START NOW (Navigasi ke Sign Up)
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SignupScreen(),
                         ),
-                      ),
-                      GestureDetector(
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (c) => const SignupScreen(),
+                      );
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      height: 60,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(30),
+                        border: Border.all(
+                          color: Colors.black.withOpacity(0.1),
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.05),
+                            blurRadius: 10,
+                            offset: const Offset(0, 4),
                           ),
-                        ),
-                        child: const Text(
-                          "Sign Up",
+                        ],
+                      ),
+                      child: const Center(
+                        child: Text(
+                          'Start Now',
                           style: TextStyle(
                             fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w900,
-                            color: AppColors.deepOcean,
-                            fontSize: 12,
+                            fontWeight: FontWeight.w800,
+                            fontSize: 16,
+                            color: Colors.black,
                           ),
                         ),
                       ),
-                    ],
+                    ),
                   ),
-                  const SizedBox(height: 40),
+
+                  const SizedBox(height: 25),
+
+                  // FOOTER: Teks Log In (Navigasi ke Login)
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const LoginScreen(),
+                        ),
+                      );
+                    },
+                    child: RichText(
+                      text: const TextSpan(
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          color: Colors.black,
+                          fontSize: 12,
+                        ),
+                        children: [
+                          TextSpan(text: "Already have an account? "),
+                          TextSpan(
+                            text: "Log In",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w900,
+                              color: AppColors.deepOcean,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 50), // Padding bawah
                 ],
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  // Widget Helper untuk Button Sosial
-  Widget _buildSocialBtn(BuildContext context, String text, String iconName) {
-    return GestureDetector(
-      onTap: () => Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (c) => const MainNavigation()),
-        (route) => false,
-      ),
-      child: Container(
-        width: double.infinity,
-        height: 52,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(30),
-          border: Border.all(color: Colors.grey.withOpacity(0.2)),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.04),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Row(
-            children: [
-              Image.asset('assets/images/$iconName', width: 22),
-              Expanded(
-                child: Text(
-                  text,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w800,
-                    fontSize: 14,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 22), // Penyeimbang posisi teks agar tengah
-            ],
-          ),
         ),
       ),
     );
