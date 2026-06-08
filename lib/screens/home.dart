@@ -1,23 +1,29 @@
 import 'package:flutter/material.dart';
 import '../utils/colors.dart';
 import 'explore.dart';
+import 'category_detail.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final VoidCallback onFundTap;
+  const HomeScreen({super.key, required this.onFundTap});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // State untuk Like interaktif
+  // Data interaktif untuk Explore Destination
   final List<Map<String, dynamic>> _destinations = [
     {
-      "name": "Raja Ampat, West Papua",
+      "label": "Raja Ampat's Sun",
       "image": "assets/images/rajaampat.jpg",
       "isLiked": true,
     },
-    {"name": "Ubud, Bali", "image": "assets/images/bali.jpg", "isLiked": false},
+    {
+      "label": "Bali's Wellness",
+      "image": "assets/images/bali.jpg",
+      "isLiked": false,
+    },
   ];
 
   @override
@@ -25,7 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          _buildHeader(context),
+          _buildHeader(),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
@@ -33,8 +39,6 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 const SizedBox(height: 25),
                 _buildHeroCard(),
-
-                // VIBE CHECK SECTION (Spasi dirapatkan)
                 const SizedBox(height: 25),
                 const Text(
                   "Vibe Check",
@@ -45,17 +49,19 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: AppColors.deepOcean,
                   ),
                 ),
-                const SizedBox(height: 5), // Spasi rapat sesuai request
+                const SizedBox(height: 5), // Spasi rapat
                 _buildVibeGrid(),
+                const SizedBox(height: 35),
 
-                const SizedBox(height: 30),
-                _buildFundTracker(),
+                // FUND TRACKER DULU (Gradasi Figma)
+                GestureDetector(
+                  onTap: widget.onFundTap,
+                  child: _buildFundCard(),
+                ),
 
                 const SizedBox(height: 35),
                 _buildExploreSection(context),
-
-                // Jarak akhir ke Navbar (tidak terlalu jauh)
-                const SizedBox(height: 50),
+                const SizedBox(height: 120),
               ],
             ),
           ),
@@ -64,33 +70,37 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // 1. Header (Greeting dinaikkan)
-  Widget _buildHeader(BuildContext context) {
+  Widget _buildHeader() {
     return Stack(
       children: [
         Container(
-          height: 250,
+          height: 220,
+          width: double.infinity,
           decoration: const BoxDecoration(
             color: AppColors.brandBlue,
             borderRadius: BorderRadius.vertical(
-              bottom: Radius.elliptical(250, 60),
+              bottom: Radius.elliptical(250, 50),
             ),
           ),
         ),
         SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.fromLTRB(
+              25,
+              5,
+              25,
+              0,
+            ), // Font diketasin (naik)
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 5), // Spasi atas kecil agar tulisan NAIK
                 Align(
                   alignment: Alignment.topRight,
                   child: CircleAvatar(
+                    radius: 26,
                     backgroundColor: Colors.white,
-                    radius: 25,
                     child: Padding(
-                      padding: const EdgeInsets.all(5),
+                      padding: const EdgeInsets.all(6),
                       child: Image.asset('assets/images/logo.png'),
                     ),
                   ),
@@ -99,7 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   "Hi,",
                   style: TextStyle(
                     fontFamily: 'Chango',
-                    fontSize: 32,
+                    fontSize: 36,
                     color: Colors.white,
                     height: 1.0,
                   ),
@@ -108,40 +118,19 @@ class _HomeScreenState extends State<HomeScreen> {
                   "Christian! 👋",
                   style: TextStyle(
                     fontFamily: 'Chango',
-                    fontSize: 32,
+                    fontSize: 36,
                     color: Colors.white,
+                    height: 1.1,
                   ),
                 ),
+                const SizedBox(height: 8),
                 const Text(
                   "Ready for your next adventure?",
                   style: TextStyle(
                     fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w800,
+                    fontSize: 15,
                     color: AppColors.deepOcean,
-                    fontSize: 13,
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(25),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
-                        blurRadius: 10,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: const TextField(
-                    decoration: InputDecoration(
-                      hintText: "Where do you want to go?",
-                      hintStyle: TextStyle(fontFamily: 'Poppins', fontSize: 13),
-                      border: InputBorder.none,
-                      suffixIcon: Icon(Icons.search, color: Colors.grey),
-                    ),
                   ),
                 ),
               ],
@@ -152,87 +141,103 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // 2. Hero Card (Labuan Bajo)
-  Widget _buildHeroCard() {
-    return Container(
-      height: 220,
-      width: double.infinity,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(25),
-        image: const DecorationImage(
-          image: AssetImage('assets/images/labuanbajo.jpg'),
-          fit: BoxFit.cover,
+  Widget _buildHeroCard() => Container(
+    height: 220,
+    width: double.infinity,
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(30),
+      image: const DecorationImage(
+        image: AssetImage('assets/images/labuanbajo.jpg'),
+        fit: BoxFit.cover,
+      ),
+    ),
+    child: Stack(
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(30),
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [Colors.transparent, Colors.black.withOpacity(0.6)],
+            ),
+          ),
         ),
-      ),
-      child: Stack(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(25),
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [Colors.transparent, Colors.black.withOpacity(0.6)],
+        Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 6,
+                ),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFCA3537),
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: const Text(
+                  "CURRENT TRIP",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 11,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
               ),
-            ),
+              const SizedBox(height: 8),
+              const Text(
+                "Labuan Bajo",
+                style: TextStyle(
+                  fontFamily: 'Chango',
+                  fontSize: 34,
+                  color: Colors.white,
+                ),
+              ),
+              const Text(
+                "July 21 - July 28",
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  fontSize: 15,
+                ),
+              ),
+            ],
           ),
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 6,
-                  ),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFCA3537),
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: const Text(
-                    "CURRENT TRIP",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 10,
-                      fontWeight: FontWeight.w900,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 5),
-                const Text(
-                  "Labuan Bajo",
-                  style: TextStyle(
-                    fontFamily: 'Chango',
-                    fontSize: 32,
-                    color: Colors.white,
-                  ),
-                ),
-                const Text(
-                  "July 21 - July 28",
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    fontSize: 14,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+        ),
+      ],
+    ),
+  );
 
-  // 3. Grid Vibe Check
   Widget _buildVibeGrid() {
-    final vibes = [
-      {'n': 'Healing', 'i': 'healing.webp', 'ic': 'leaves (1).png'},
-      {'n': 'Adventure', 'i': 'adventure.jpg', 'ic': 'bagpack.png'},
-      {'n': 'Food', 'i': 'food.jpg', 'ic': 'food-tray (1).png'},
-      {'n': 'Hidden', 'i': 'hidden.jpg', 'ic': 'magic-wand.png'},
+    final List<Map<String, dynamic>> vibes = [
+      {
+        'n': 'Healing',
+        'i': 'healing.webp',
+        'ic': 'leaves (1).png',
+        'c': const Color(0xFF8DA47E),
+      },
+      {
+        'n': 'Adventure',
+        'i': 'adventure.jpg',
+        'ic': 'bagpack.png',
+        'c': AppColors.bluebird,
+      },
+      {
+        'n': 'Food',
+        'i': 'food.jpg',
+        'ic': 'food-tray (1).png',
+        'c': const Color(0xFFD04E50),
+      },
+      {
+        'n': 'Hidden',
+        'i': 'hidden.jpg',
+        'ic': 'magic-wand.png',
+        'c': AppColors.skyBlue,
+      },
     ];
     return GridView.builder(
       shrinkWrap: true,
@@ -244,96 +249,116 @@ class _HomeScreenState extends State<HomeScreen> {
         childAspectRatio: 1.1,
       ),
       itemCount: 4,
-      itemBuilder: (context, index) => Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          image: DecorationImage(
-            image: AssetImage('assets/images/${vibes[index]['i']}'),
-            fit: BoxFit.cover,
+      itemBuilder: (context, i) => GestureDetector(
+        onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (c) => CategoryDetailScreen(category: vibes[i]['n']),
           ),
         ),
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: Colors.black.withOpacity(0.3),
+            borderRadius: BorderRadius.circular(25),
+            image: DecorationImage(
+              image: AssetImage('assets/images/${vibes[i]['i']}'),
+              fit: BoxFit.cover,
+            ),
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                'assets/images/${vibes[index]['ic']}',
-                width: 35,
-                color: Colors.white,
-              ),
-              const SizedBox(height: 8),
-              Text(
-                vibes[index]['n']!,
-                style: const TextStyle(
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w900,
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(25),
+              color: Colors.black.withOpacity(0.35),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  'assets/images/${vibes[i]['ic']}',
+                  width: 38,
                   color: Colors.white,
-                  fontSize: 16,
                 ),
-              ),
-            ],
+                const SizedBox(height: 10),
+                Text(
+                  vibes[i]['n'],
+                  style: const TextStyle(
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w900,
+                    color: Colors.white,
+                    fontSize: 17,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  // 4. Fund Tracker (Climate Crisis & Layout Adjustment)
-  Widget _buildFundTracker() {
+  Widget _buildFundCard() {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(25),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(30),
+      decoration: ShapeDecoration(
+        // GRADASI: Krem -> Kuning Muda -> Oranye -> Coral
         gradient: const LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [Color(0xFFFEF9E6), Color(0xFFFFDE97), Color(0xFFFA855A)],
+          colors: [
+            Color(0xFFFEF9E6), // Krem Pucat
+            Color(0xFFFFDE97), // Kuning Peach
+            Color(0xFFFCB178), // Oranye
+            Color(0xFFFA855A), // Coral Glow
+          ],
         ),
-        boxShadow: [
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(35), // Sudut sangat bulat
+        ),
+        shadows: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 10,
-            offset: const Offset(0, 5),
+            color: Colors.black.withOpacity(0.12),
+            blurRadius: 20,
+            offset: const Offset(0, 10),
           ),
         ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // BADGE: CURRENT STATUS
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
             decoration: BoxDecoration(
-              color: const Color(0xFF61C4DB),
-              borderRadius: BorderRadius.circular(15),
+              color: const Color(0xFF61C4D8), // Biru Cyan
+              borderRadius: BorderRadius.circular(30),
             ),
             child: const Text(
-              "CURRENT STATUS",
+              'CURRENT STATUS',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 10,
+                fontFamily: 'Poppins',
                 fontWeight: FontWeight.w900,
               ),
             ),
           ),
+
           const SizedBox(height: 15),
+
+          // TEKS JUDUL: Merah Tua
           const Text(
-            "How's the fund looking?",
+            'How’s the \nfund looking?',
             style: TextStyle(
+              color: Color(0xFFC83636), // Warna Merah Figma
+              fontSize: 28,
               fontFamily: 'Chango',
-              fontSize: 26,
-              color: Color(0xFFC83636),
               height: 1.1,
             ),
           ),
 
-          const SizedBox(height: 10),
+          const SizedBox(height: 15),
 
-          // Remaining Berada di Sebelah Saldo
+          // BAGIAN SALDO: Sejajar ke Kanan
           Align(
             alignment: Alignment.centerRight,
             child: Row(
@@ -342,32 +367,36 @@ class _HomeScreenState extends State<HomeScreen> {
               textBaseline: TextBaseline.alphabetic,
               children: [
                 const Text(
-                  "Remaining: ",
+                  'Remaining: ',
                   style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.bold,
+                    color: Color(0xFFFEF9E6), // Teks krem
                     fontSize: 12,
-                    color: Colors.white,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
-                // PAKAI FONT CLIMATE CRISIS
+                // ANGKA SALDO: Font Climate Crisis
                 const Text(
-                  "Rp\n3.5M",
+                  'Rp 3.5M',
                   style: TextStyle(
-                    fontFamily: 'ClimateCrisis',
-                    fontSize: 28,
-                    color: Color(0xFFFFECC0),
+                    color: Color(0xFFFFECC0), // Krem gading terang
+                    fontSize: 32,
+                    fontFamily:
+                        'ClimateCrisis', // Pastikan nama di pubspec sama
+                    fontWeight: FontWeight.w400,
                   ),
                 ),
               ],
             ),
           ),
 
-          const SizedBox(height: 10),
+          const SizedBox(height: 15),
+
+          // TOMBOL STATUS: On Track
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
             decoration: BoxDecoration(
-              color: const Color(0xFF61C4DB),
+              color: const Color(0xFF61C4DB), // Biru Cyan
               borderRadius: BorderRadius.circular(20),
             ),
             child: Row(
@@ -378,13 +407,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   width: 18,
                   color: Colors.white,
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: 10),
                 const Text(
-                  "On Track",
+                  'On Track',
                   style: TextStyle(
                     color: Colors.white,
+                    fontSize: 13,
+                    fontFamily: 'Poppins',
                     fontWeight: FontWeight.w900,
-                    fontSize: 12,
                   ),
                 ),
               ],
@@ -395,117 +425,114 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // 5. Explore Destinations
-  Widget _buildExploreSection(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text(
-              "Explore Destination",
+  Widget _buildExploreSection(context) => Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Text(
+            "Explore Destination",
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w900,
+              fontSize: 22,
+              color: AppColors.deepOcean,
+            ),
+          ),
+          GestureDetector(
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (c) => const ExploreScreen()),
+            ),
+            child: const Text(
+              "See all",
               style: TextStyle(
                 fontFamily: 'Poppins',
-                fontWeight: FontWeight.w900,
-                fontSize: 18,
-                color: AppColors.deepOcean,
-              ),
-            ),
-            GestureDetector(
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const ExploreScreen()),
-              ),
-              child: const Text(
-                "See all",
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.bluebird,
-                  decoration: TextDecoration.underline,
-                ),
-              ),
-            ),
-          ],
-        ),
-        const Text(
-          "Hidden gems & dreamy getaways await",
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            color: Colors.grey,
-            fontSize: 12,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        const SizedBox(height: 20),
-        Column(
-          children: List.generate(
-            _destinations.length,
-            (index) => Padding(
-              padding: const EdgeInsets.only(bottom: 20),
-              child: _buildDestCard(
-                index,
-                _destinations[index]['image'],
-                _destinations[index]['name'],
-                _destinations[index]['isLiked'],
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildDestCard(int index, String img, String location, bool isLiked) {
-    return Container(
-      height: 220,
-      width: double.infinity,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        image: DecorationImage(image: AssetImage(img), fit: BoxFit.cover),
-      ),
-      child: Stack(
-        children: [
-          Positioned(
-            left: 20,
-            bottom: 20,
-            child: Text(
-              location,
-              style: const TextStyle(
-                fontFamily: 'Poppins',
-                color: Colors.white,
-                fontWeight: FontWeight.w900,
-                fontSize: 18,
-                shadows: [Shadow(color: Colors.black45, blurRadius: 10)],
-              ),
-            ),
-          ),
-          Positioned(
-            right: 15,
-            bottom: 15,
-            child: GestureDetector(
-              onTap: () =>
-                  setState(() => _destinations[index]['isLiked'] = !isLiked),
-              child: Container(
-                padding: const EdgeInsets.all(8),
-                decoration: const BoxDecoration(
-                  color: Colors.white24,
-                  shape: BoxShape.circle,
-                ),
-                child: Image.asset(
-                  // Nama asset heartborder.png
-                  isLiked
-                      ? 'assets/images/heart.png'
-                      : 'assets/images/heartborder.png',
-                  width: 28,
-                  color: Colors.white,
-                ),
+                fontWeight: FontWeight.w800,
+                color: AppColors.bluebird,
+                decoration: TextDecoration.underline,
               ),
             ),
           ),
         ],
       ),
-    );
-  }
+      const Text(
+        "Hidden gems & dreamy getaways await",
+        style: TextStyle(
+          fontFamily: 'Poppins',
+          color: Colors.grey,
+          fontSize: 13,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+      const SizedBox(height: 25),
+      Column(
+        children: List.generate(
+          _destinations.length,
+          (i) => Padding(
+            padding: const EdgeInsets.only(bottom: 25),
+            child: _buildDestCard(
+              i,
+              _destinations[i]['image'],
+              _destinations[i]['label'],
+              _destinations[i]['isLiked'],
+            ),
+          ),
+        ),
+      ),
+    ],
+  );
+
+  Widget _buildDestCard(int i, String img, String lbl, bool liked) => Container(
+    height: 210,
+    width: double.infinity,
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(30),
+      image: DecorationImage(image: AssetImage(img), fit: BoxFit.cover),
+    ),
+    child: Stack(
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(30),
+            color: Colors.black.withOpacity(0.15),
+          ),
+        ),
+        Positioned(
+          left: 20,
+          bottom: 25,
+          child: Text(
+            lbl,
+            style: const TextStyle(
+              fontFamily: 'ClimateCrisis',
+              color: Colors.white,
+              fontSize: 24,
+            ),
+          ),
+        ),
+        Positioned(
+          right: 20,
+          bottom: 25,
+          child: GestureDetector(
+            onTap: () => setState(() => _destinations[i]['isLiked'] = !liked),
+            child: Container(
+              padding: const EdgeInsets.all(10),
+              decoration: const BoxDecoration(
+                color: Colors.white24,
+                shape: BoxShape.circle,
+              ),
+              child: Image.asset(
+                liked
+                    ? 'assets/images/heart.png'
+                    : 'assets/images/heartborder.png',
+                width: 28,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
 }
