@@ -1,13 +1,13 @@
 # Backend Architecture
 
-The Ventura backend is built using a **Microservices Architecture**, consisting of four independent services:
+The Ventura backend follows a Microservices Architecture consisting of four independent services:
 
-| Service         | Port | Responsibility                                                                |
-| --------------- | ---- | ----------------------------------------------------------------------------- |
-| API Gateway     | 3000 | Central entry point for all client requests and request routing               |
-| Auth Service    | 3001 | Authentication, authorization, and user identity management                   |
-| Finance Service | 3002 | Financial operations, budgeting, expense tracking, and related business logic |
-| Travel Service  | 3003 | Travel planning, itinerary management, and travel-related operations          |
+| Service | Port | Responsibility |
+|----------|----------|----------|
+| API Gateway | 3000 | Routes incoming requests to the appropriate service |
+| Auth Service | 3001 | Authentication, authorization, and JWT management |
+| Finance Service | 3002 | Budgeting, expense tracking, and financial management |
+| Travel Service | 3003 | Travel planning and recommendation generation |
 
 ## Request Flow
 
