@@ -14,7 +14,7 @@ class ApiService {
   static String get baseUrl {
     if (!useLocalBackend) {
       // Ganti URL ini dengan URL API Gateway Render Anda jika sudah dideploy
-      return 'https://ventura-gateway.onrender.com'; 
+      return 'https://habitant-scrimmage-ascend.ngrok-free.dev'; 
     }
 
     if (kIsWeb) return 'http://localhost:3000';
