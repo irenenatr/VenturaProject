@@ -1,7 +1,7 @@
 # Ventura
 Smart travel planning application that helps users discover destinations, generate itineraries, manage travel budgets, and track expenses through an integrated travel planning platform.
 
-hosting link : ventura-app.netlify.app
+*hosting link : ventura-app.netlify.app*
 ## Key Features
 * Destination Picker
 * Smart Budget Planner
