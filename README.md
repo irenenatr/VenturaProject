@@ -13,22 +13,22 @@ hosting link : ventura-app.netlify.app
 <table align="center">
   <tr>
     <td align="center">
-      <img width="280" src="LINK_TRIP"><br>
+      <img width="280" src="https://github.com/user-attachments/assets/5d298da4-67d3-471f-8822-865b46714ebc"><br>
       <b>Trip Schedule</b>
     </td>
     <td align="center">
-      <img width="280" src="LINK_FILTER"><br>
+      <img width="280" src="https://github.com/user-attachments/assets/11e6107e-338a-4098-882e-0e0515c9a8a3"><br>
       <b>Destination Filter</b>
     </td>
   </tr>
 
   <tr>
     <td align="center">
-      <img width="280" src="LINK_EXPLORE"><br>
+      <img width="280" src="https://github.com/user-attachments/assets/a1f3351f-d430-4dd4-9055-f68f70f39546"><br>
       <b>Explore Destination</b>
     </td>
     <td align="center">
-      <img width="280" src="LINK_EXPENSE"><br>
+      <img width="280" src="https://github.com/user-attachments/assets/6d3e2641-c90b-4f43-b31b-280ee81bbcf8"><br>
       <b>Expense Tracker</b>
     </td>
   </tr>
