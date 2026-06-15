@@ -10,15 +10,29 @@ hosting link : ventura-app.netlify.app
 * Expense Tracker
 <h2>Application Preview</h2>
 
-<p align="center">
-  <img width="250" alt="Detail Plan - Day 1" src="https://github.com/user-attachments/assets/5d298da4-67d3-471f-8822-865b46714ebc" />
-  <img width="250" alt="Filter" src="https://github.com/user-attachments/assets/11e6107e-338a-4098-882e-0e0515c9a8a3" />
-</p>
+<table align="center">
+  <tr>
+    <td align="center">
+      <img width="280" src="LINK_TRIP"><br>
+      <b>Trip Schedule</b>
+    </td>
+    <td align="center">
+      <img width="280" src="LINK_FILTER"><br>
+      <b>Destination Filter</b>
+    </td>
+  </tr>
 
-<p align="center">
-  <img width="250" alt="Explore Destination" src="https://github.com/user-attachments/assets/a1f3351f-d430-4dd4-9055-f68f70f39546" />
-  <img width="250" alt="Expense Tracker" src="https://github.com/user-attachments/assets/6d3e2641-c90b-4f43-b31b-280ee81bbcf8" />
-</p>
+  <tr>
+    <td align="center">
+      <img width="280" src="LINK_EXPLORE"><br>
+      <b>Explore Destination</b>
+    </td>
+    <td align="center">
+      <img width="280" src="LINK_EXPENSE"><br>
+      <b>Expense Tracker</b>
+    </td>
+  </tr>
+</table>
 
 ## Tech Stack
 ### Frontend
