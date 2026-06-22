@@ -34,49 +34,64 @@ Smart travel planning application that helps users discover destinations, genera
   </tr>
 </table>
 
----
-## Installation
-Untuk menginstal seluruh dependensi backend dan frontend secara otomatis, jalankan perintah ini di root folder:
+
+## Langkah Instalasi & Konfigurasi
+### 1. Dapatkan File Kredensial Firebase (`serviceAccountKey.json`)
+Aplikasi backend memerlukan kredensial Firebase Admin SDK untuk mengakses database Firestore.
+1. Buka [Firebase Console](https://console.firebase.google.com/) lalu masuk/buat proyek Firebase Anda.
+2. Aktifkan **Cloud Firestore Database** di proyek Anda.
+3. Masuk ke **Project Settings** (Setelan Proyek - ikon gerigi di kiri atas) > tab **Service Accounts** (Akun Layanan).
+4. Klik tombol **Generate new private key** (Buat kunci privat baru) di bagian bawah.
+5. Sebuah file JSON akan terunduh secara otomatis.
+6. Ganti nama file tersebut menjadi `serviceAccountKey.json`.
+7. Salin file `serviceAccountKey.json` tersebut dan letakkan di dalam folder `src/config` pada setiap service backend berikut:
+   * **Auth Service:** `backend/auth-service/src/config/serviceAccountKey.json`
+   * **Finance Service:** `backend/finance-service/src/config/serviceAccountKey.json`
+   * **Travel Service:** `backend/travel-service/src/config/serviceAccountKey.json`
+
+### 2. Setup File Konfigurasi Environment (`.env`)
+Salin file template `.env.example` menjadi `.env` di masing-masing folder microservice:
+* **Auth Service:** Salin `backend/auth-service/.env.example` menjadi `backend/auth-service/.env`, lalu isi `JWT_SECRET` Anda sendiri.
+* **Finance Service:** Salin `backend/finance-service/.env.example` menjadi `backend/finance-service/.env`, lalu isi `JWT_SECRET` Anda sendiri.
+* **Travel Service:** Salin `backend/travel-service/.env.example` menjadi `backend/travel-service/.env`, lalu isi `OPENAI_API_KEY` dengan OpenAI API Key milik Anda.
+
+### 3. Install Dependensi
+Jalankan perintah ini di root folder proyek untuk menginstal seluruh dependensi backend dan frontend secara otomatis:
 ```bash
 npm run install:all
 ```
-### 1. Lokasi untuk File serviceAccountKey.json (Firebase)
-File JSON kredensial dari Firebase Console ini harus diletakkan di dalam folder `src/config` pada setiap service backend:
-* **Auth Service:** `backend/auth-service/src/config/serviceAccountKey.json`
-* **Finance Service:** `backend/finance-service/src/config/serviceAccountKey.json`
-* **Travel Service:** `backend/travel-service/src/config/serviceAccountKey.json`
-### 2. Lokasi untuk File .env (Environment Variables)
-File konfigurasi variabel ini diletakkan di root folder dari masing-masing microservice (bukan di dalam folder `src`):
-* **Auth Service:** `backend/auth-service/.env`
-* **Finance Service:** `backend/finance-service/.env`
-* **Travel Service:** `backend/travel-service/.env`
-*(Catatan: Anda tinggal menyalin file yang sudah Anda miliki di laptop Anda saat ini ke folder-folder tersebut).*
+
 ---
 
-## Menjalankan Proyek (Pengembangan Lokal)
-### Opsi 1: Mulai Cepat (Windows)
-Jalankan skrip batch di bawah ini untuk memulai Ventura melalui menu interaktif:
+## Menjalankan Proyek di Browser (Chrome)
+
+### Opsi 1: Mulai Cepat via Menu Interaktif (Windows)
+Jika Anda menggunakan Windows, cukup jalankan skrip batch berikut di terminal:
 ```cmd
 run-ventura.bat
 ```
-### Opsi 2: Memulai Secara Manual (Terminal)
-#### Jalankan Semua Layanan Backend
-Mulai semua layanan mikro backend secara bersamaan:
+Pilih opsi **`[2] Run Backend Services + Frontend (Chrome Web Browser)`**. Skrip ini akan secara otomatis memvalidasi lingkungan Node.js & Flutter Anda, menginstal dependensi yang kurang, lalu menjalankan backend dan browser Chrome secara bersamaan.
+
+### Opsi 2: Memulai Secara Manual via Terminal
+Jika Anda ingin menjalankan perintah secara manual, buka terminal di root folder proyek:
+
+#### 1. Jalankan Backend & Frontend (Chrome) Bersamaan
+Cukup jalankan satu perintah berikut untuk memulai seluruh microservice backend dan meluncurkan frontend di Chrome secara otomatis:
 ```bash
-npm run start:backend
+npm run start:all:chrome
 ```
-#### Jalankan Layanan Secara Terpisah
-Jika diperlukan, setiap layanan juga dapat dijalankan secara terpisah:
-```bash
-# API Gateway
-npm run start:gateway
-# Layanan Autentikasi (Auth Service)
-npm run start:auth
-# Layanan Keuangan (Finance Service)
-npm run start:finance
-# Layanan Perjalanan (Travel Service)
-npm run start:travel
-```
+
+#### 2. Jalankan Backend dan Frontend Secara Terpisah
+Jika Anda ingin melihat log/output dari masing-masing bagian secara terpisah:
+
+* **Jalankan Semua Layanan Backend:**
+  ```bash
+  npm run start:backend
+  ```
+* **Jalankan Frontend di Browser Chrome:**
+  ```bash
+  npm run start:frontend:chrome
+  ```
 
 ## Tech Stack
 ### Frontend
