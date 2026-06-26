@@ -36,7 +36,6 @@ Smart travel planning application that helps users discover destinations, genera
 
 
 ## Prasyarat Software & Editor 
-
 Sebelum memulai instalasi, pastikan Anda telah menginstal software dan ekstensi berikut agar kode terbaca dengan benar di editor (VS Code) dan tidak muncul garis merah:
 
 ### 1. Software Utama (Wajib Terinstal di OS)
@@ -48,8 +47,33 @@ Sebelum memulai instalasi, pastikan Anda telah menginstal software dan ekstensi 
 Jika menggunakan VS Code, instal ekstensi berikut melalui menu Extensions (`Ctrl + Shift + X`):
 * **Flutter** (oleh Dart Code) – Mengaktifkan dukungan autocomplete dan run aplikasi Flutter.
 * **Dart** (oleh Dart Code) – Terinstal otomatis saat menginstal ekstensi Flutter.
-
 ---
+
+## Langkah Instalasi & Konfigurasi
+### 1. Dapatkan File Kredensial Firebase (serviceAccountKey.json)
+Aplikasi backend memerlukan kredensial Firebase Admin SDK untuk mengakses database Firestore.
+1. Buka [Firebase Console](https://console.firebase.google.com/) lalu masuk/buat proyek Firebase Anda.
+2. Aktifkan *Cloud Firestore Database* di proyek Anda.
+3. Masuk ke *Project Settings* (Setelan Proyek - ikon gerigi di kiri atas) > tab *Service Accounts* (Akun Layanan).
+4. Klik tombol *Generate new private key* (Buat kunci privat baru) di bagian bawah.
+5. Sebuah file JSON akan terunduh secara otomatis.
+6. Ganti nama file tersebut menjadi serviceAccountKey.json.
+7. Salin file serviceAccountKey.json tersebut dan letakkan di dalam folder src/config pada setiap service backend berikut:
+   * *Auth Service:* backend/auth-service/src/config/serviceAccountKey.json
+   * *Finance Service:* backend/finance-service/src/config/serviceAccountKey.json
+   * *Travel Service:* backend/travel-service/src/config/serviceAccountKey.json
+
+### 2. Setup File Konfigurasi Environment (.env)
+Salin file template .env.example menjadi .env di masing-masing folder microservice:
+* *Auth Service:* Salin backend/auth-service/.env.example menjadi backend/auth-service/.env, lalu isi JWT_SECRET.
+* *Finance Service:* Salin backend/finance-service/.env.example menjadi backend/finance-service/.env, lalu isi JWT_SECRET.
+
+(Catatan penting: Nilai JWT_SECRET bebas diisi teks apa saja, namun nilainya **harus sama* di semua service backend agar token login dapat divalidasi dengan benar).*
+
+### 3. Install Dependensi
+Jalankan perintah ini di root folder proyek untuk menginstal seluruh dependensi backend dan frontend secara otomatis:
+bash
+npm run install:all
 
 ## Menjalankan Proyek di Browser (Chrome)
 ### Opsi 1: Mulai Cepat via Menu Interaktif (Windows)
