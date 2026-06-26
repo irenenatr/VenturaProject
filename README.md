@@ -72,8 +72,9 @@ Salin file template .env.example menjadi .env di masing-masing folder microservi
 
 ### 3. Install Dependensi
 Jalankan perintah ini di root folder proyek untuk menginstal seluruh dependensi backend dan frontend secara otomatis:
-bash
+```bash
 npm run install:all
+```
 
 ## Menjalankan Proyek di Browser (Chrome)
 ### Opsi 1: Mulai Cepat via Menu Interaktif (Windows)
